@@ -13,7 +13,7 @@ export default function GuidelinesPage() {
     <LegalPage
       title="Community guidelines"
       intro="UniMatch only works if people feel safe and respected. These are the standards everyone agrees to."
-      updated="[DATE BEFORE LAUNCH]"
+      updated="October 8, 2026"
     >
       <h2>Be yourself</h2>
       <p>

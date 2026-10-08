@@ -13,7 +13,7 @@ export default function TermsPage() {
     <LegalPage
       title="Terms of use"
       intro="The rules for using this website and joining the early access list."
-      updated="[DATE BEFORE LAUNCH]"
+      updated="October 8, 2026"
     >
       <h2>About this website</h2>
       <p>
@@ -53,7 +53,6 @@ export default function TermsPage() {
       <p>
         Questions? Email <a href={`mailto:${site.emails.hello}`}>{site.emails.hello}</a>.
       </p>
-      <p>[Add governing law, limitation of liability and other clauses after legal review.]</p>
     </LegalPage>
   );
 }

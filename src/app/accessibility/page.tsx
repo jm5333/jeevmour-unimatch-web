@@ -13,7 +13,7 @@ export default function AccessibilityPage() {
     <LegalPage
       title="Accessibility statement"
       intro="UniMatch should work for every student. Here's what we aim for and how to tell us when we fall short."
-      updated="[DATE BEFORE LAUNCH]"
+      updated="October 8, 2026"
     >
       <h2>Our goal</h2>
       <p>
@@ -34,14 +34,13 @@ export default function AccessibilityPage() {
       <h2>Known limitations</h2>
       <ul>
         <li>Some images are placeholders until we have licensed photography. Each one has a text description.</li>
-        <li>[List any issues found during accessibility testing before launch.]</li>
       </ul>
 
       <h2>Tell us about a barrier</h2>
       <p>
         If something doesn&apos;t work for you, email{" "}
         <a href={`mailto:${site.emails.support}`}>{site.emails.support}</a> with the page and what happened. We aim
-        to reply within [5] business days.
+        to reply within 5 business days.
       </p>
     </LegalPage>
   );

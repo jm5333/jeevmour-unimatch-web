@@ -13,7 +13,7 @@ export default function PrivacyPage() {
     <LegalPage
       title="Privacy policy"
       intro="What we collect on this website and the early access list, why, and the choices you have."
-      updated="[DATE BEFORE LAUNCH]"
+      updated="October 8, 2026"
     >
       <h2>Who we are</h2>
       <p>
@@ -50,13 +50,13 @@ export default function PrivacyPage() {
       <h2>Who processes it</h2>
       <p>
         Waitlist data is stored with Supabase, our database provider. The website is hosted by Vercel. These providers
-        process data on our behalf. [Confirm data regions and processor terms before launch.]
+        process data on our behalf, and our database is hosted in the United States.
       </p>
 
       <h2>How long we keep it</h2>
       <p>
         We keep early access signups until UniMatch launches at your university or until you ask us to delete them.
-        Abuse-prevention records are deleted automatically after [30] days.
+        Abuse-prevention records are deleted automatically after 30 days.
       </p>
 
       <h2>Your choices</h2>
