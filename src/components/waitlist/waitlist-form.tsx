@@ -94,6 +94,7 @@ export function WaitlistForm() {
           type="email"
           autoComplete="email"
           inputMode="email"
+          maxLength={254}
           required
           defaultValue={v?.email}
           aria-invalid={err("email") ? true : undefined}
@@ -117,6 +118,7 @@ export function WaitlistForm() {
           name="university"
           type="text"
           autoComplete="organization"
+          maxLength={120}
           required
           defaultValue={v?.university}
           aria-invalid={err("university") ? true : undefined}

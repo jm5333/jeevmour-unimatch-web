@@ -38,6 +38,7 @@ Other scripts: `npm run build` (production build), `npm run lint`.
 1. Create a free project at [supabase.com](https://supabase.com).
 2. Open **SQL Editor**, paste the contents of `supabase/migrations/20261008000000_waitlist.sql`, and run it.
    This creates two tables with Row Level Security **on and no public policies**, so nobody can read or write them from a browser.
+   Then run `supabase/migrations/20261009000000_harden_waitlist.sql` the same way. Its last line should show `false` twice.
 3. Go to **Project Settings → API Keys** and copy:
    - the **Project URL** → `SUPABASE_URL`
    - a **Secret key** (starts with `sb_secret_`) → `SUPABASE_SECRET_KEY`
@@ -121,17 +122,28 @@ Design tokens (colors, fonts, radii) are in `src/app/globals.css` under `@theme`
 
 ---
 
-## Waitlist security
+## Security
 
-- Server-side validation with Zod on every submission
-- Duplicate emails are handled quietly (it tells the person they're on the list, which is true, without revealing anything new)
-- Rate limit: 5 attempts per hour per salted IP hash; raw IPs are never stored
-- Spam protection: hidden honeypot field plus a minimum fill time
-- Explicit, optional, unchecked-by-default marketing consent, stored with a timestamp
-- Required 18+/current-student confirmation
-- Errors are shown with an accessible summary; success is shown **only** after the database confirms the save
+Last audited: October 2026.
 
----
+**What protects the site**
+- **Secrets stay on the server.** The Supabase secret key and IP salt are only read in server code (`src/lib/supabase/admin.ts` imports `server-only`, so the build fails if it's ever pulled into browser code). A test build with fake keys confirmed none of them appear in the files sent to browsers.
+- **No secrets in Git.** Every commit was scanned for keys and `.env` files. Only `.env.example` (empty values) is committed, and `.env*` is ignored.
+- **Database locked down.** Row Level Security is on and forced, and the public `anon`/`authenticated` roles have no access to the tables, sequence or cleanup function. Only the website's server can write, and nothing can read signups except you in the Supabase dashboard.
+- **Form input is validated and cleaned on the server** (Zod): invisible characters stripped, lengths capped, the university name limited to letters, numbers and normal punctuation, interests limited to the three allowed values. Supabase uses parameterized queries, so SQL injection isn't possible, and React escapes all output.
+- **Cross-site request protection.** Next.js rejects submissions from other websites, and the form also rejects requests with no `Origin` header.
+- **Rate limiting.** 5 attempts per hour per visitor (keyed by an HMAC of the IP; raw IPs are never stored) and 60 per minute site-wide.
+- **Spam protection.** Hidden honeypot field and a minimum fill time.
+- **Request size limit.** Form submissions over 32 KB are rejected.
+- **Security headers.** Content-Security-Policy (only this site's own scripts, styles, fonts and images), HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, Cross-Origin-Opener-Policy. The `X-Powered-By` header is off.
+- **No debug output in production.** Source maps are not shipped, errors show a generic message, and server logs record error codes only, never submitted data.
+- **Fails closed.** If any environment variable is missing, the form refuses signups instead of saving them unprotected, and it never shows success unless the database confirmed the save.
+
+**Not applicable to this site (yet)**
+- There are no user accounts, logins, passwords or admin pages on the website, so there's nothing to authenticate or hash. The waitlist is managed in the Supabase dashboard, protected by your Supabase login. Add 2FA to Supabase, Vercel, GitHub and Porkbun.
+- When real accounts are built, use Supabase Auth (it hashes passwords with bcrypt) rather than storing passwords yourself.
+
+**Dependencies.** `npm audit --omit=dev` reports 0 vulnerabilities in what ships to production. `npm audit` flags one high-severity issue in `braces`, which only runs inside the code linter on a developer's machine (not on the website), and no patched version exists yet. Recheck with `npm audit` monthly.
 
 ## Before you launch: checklist
 
